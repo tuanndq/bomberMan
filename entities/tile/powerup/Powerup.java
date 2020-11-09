@@ -14,8 +14,10 @@ public abstract class Powerup extends Tile {
 		_level = level;
 	}
 	
-	public abstract void setValues();
-	
+	public abstract void setValues1();
+
+	public abstract void setValues2();
+
 	public void removeLive() {
 		if(_duration > 0)
 			_duration--;

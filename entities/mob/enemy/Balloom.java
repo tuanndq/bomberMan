@@ -10,7 +10,7 @@ public class Balloom extends Enemy {
 	
 	
 	public Balloom(int x, int y, Board board) {
-		super(x, y, board, Sprite.balloom_dead, Game.getPlayerSpeed() / 2, 100);
+		super(x, y, board, Sprite.balloom_dead, Game.getPlayerSpeed1() / 2, 100);
 		
 		_sprite = Sprite.balloom_left1;
 		

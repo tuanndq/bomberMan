@@ -10,7 +10,19 @@ public class PowerupSpeed extends Powerup {
 	public PowerupSpeed(int x, int y, int level, Sprite sprite) {
 		super(x, y, level, sprite);
 	}
-	
+
+	@Override
+	public void setValues1() {
+		_active = true;
+		Game.addPlayerSpeed1(1);
+	}
+
+	@Override
+	public void setValues2() {
+		_active = true;
+		Game.addPlayerSpeed2(1);
+	}
+
 	@Override
 	public boolean collide(Entity e) {
 		
@@ -22,13 +34,4 @@ public class PowerupSpeed extends Powerup {
 		
 		return false;
 	}
-	
-	@Override
-	public void setValues() {
-		_active = true;
-		Game.addPlayerSpeed(1);
-	}
-	
-
-
 }

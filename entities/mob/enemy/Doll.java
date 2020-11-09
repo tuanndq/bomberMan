@@ -10,7 +10,7 @@ public class Doll extends Enemy {
 	
 	
 	public Doll(int x, int y, Board board) {
-		super(x, y, board, Sprite.doll_dead, Game.getPlayerSpeed(), 400);
+		super(x, y, board, Sprite.doll_dead, Game.getPlayerSpeed1(), 400);
 		
 		_sprite = Sprite.doll_right1;
 		

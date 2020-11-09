@@ -20,12 +20,14 @@ public class Bomb extends AnimatedEntitiy {
 	protected boolean _allowedToPassThru = true;
 	protected DirectionalExplosion[] _explosions = null;
 	protected boolean _exploded = false;
+	protected int _index;
 	
-	public Bomb(int x, int y,Board board) {
+	public Bomb(int x, int y,Board board, int index) {
 		_x = x;
 		_y = y;
 		_board = board;
 		_sprite = Sprite.bomb;
+		_index = index;
 	}
 	
 	@Override
@@ -89,7 +91,12 @@ public class Bomb extends AnimatedEntitiy {
 		_explosions = new DirectionalExplosion[4];
 		
 		for (int i = 0; i < _explosions.length; i++) {
-			_explosions[i] = new DirectionalExplosion((int)_x, (int)_y, i, Game.getBombRadius(), _board);
+			if (_index == 1) {
+				_explosions[i] = new DirectionalExplosion((int)_x, (int)_y, i, Game.getBombRadius1(), _board);
+			}
+			if (_index == 2) {
+				_explosions[i] = new DirectionalExplosion((int)_x, (int)_y, i, Game.getBombRadius2(), _board);
+			}
 		}
 	}
 	

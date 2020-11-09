@@ -24,9 +24,13 @@ public class PowerupBombs extends Powerup {
 	}
 	
 	@Override
-	public void setValues() {
+	public void setValues1() {
 		_active = true;
-		Game.addBombRate(1);
+		Game.addBombRate1(1);
 	}
 
+	public void setValues2() {
+		_active = true;
+		Game.addBombRate2(1);
+	}
 }

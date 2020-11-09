@@ -20,19 +20,25 @@ import com.carlosflorencio.bomberman.level.Coordinates;
 
 public class Player extends Mob {
 	
-	private List<Bomb> _bombs;
+	private List<Bomb> _bombs1;
+	private List<Bomb> _bombs2;
 	protected Keyboard _input;
 	protected int _index;
 
 	protected int _timeBetweenPutBombs = 0;
-
+	protected int _timeBetweenPutBombs1 = 0;
 
 	public static List<Powerup> _powerups = new ArrayList<Powerup>();
 	
 	
 	public Player(int x, int y, Board board, int index) {
 		super(x, y, board);
-		_bombs = _board.getBombs();
+		if (index == 1) {
+			_bombs1 = _board.getBombs1();
+		}
+		if (index == 2) {
+			_bombs2 = _board.getBombs2();
+		}
 		_input = _board.getInput();
 		_sprite = Sprite.player_right;
 		_index = index;
@@ -85,26 +91,26 @@ public class Player extends Mob {
 	 */
 	private void detectPlaceBomb() {
 		if (_index == 1) {
-			if(_input.space && Game.getBombRate() > 0 && _timeBetweenPutBombs < 0) {
+			if(_input.space && Game.getBombRate1() > 0 && _timeBetweenPutBombs < 0) {
 
 				int xt = Coordinates.pixelToTile(_x + _sprite.getSize() / 2);
 				int yt = Coordinates.pixelToTile( (_y + _sprite.getSize() / 2) - _sprite.getSize() ); //subtract half player height and minus 1 y position
 
 				placeBomb(xt,yt);
-				Game.addBombRate(-1);
+				Game.addBombRate1(-1);
 
 				_timeBetweenPutBombs = 30;
 			}
 		}
 
 		if (_index == 2) {
-			if(_input.enter && Game.getBombRate() > 0 && _timeBetweenPutBombs < 0) {
+			if(_input.enter && Game.getBombRate2() > 0 && _timeBetweenPutBombs < 0) {
 
 				int xt = Coordinates.pixelToTile(_x + _sprite.getSize() / 2);
 				int yt = Coordinates.pixelToTile( (_y + _sprite.getSize() / 2) - _sprite.getSize() ); //subtract half player height and minus 1 y position
 
 				placeBomb(xt,yt);
-				Game.addBombRate(-1);
+				Game.addBombRate2(-1);
 
 				_timeBetweenPutBombs = 30;
 			}
@@ -112,22 +118,38 @@ public class Player extends Mob {
 	}
 	
 	protected void placeBomb(int x, int y) {
-		Bomb b = new Bomb(x, y, _board);
-		_board.addBomb(b);
+		Bomb b = new Bomb(x, y, _board, _index);
+		if (_index == 1) {
+			_board.addBomb1(b);
+		}
+		if (_index == 2) {
+			_board.addBomb2(b);
+		}
 	}
 	
 	private void clearBombs() {
-		Iterator<Bomb> bs = _bombs.iterator();
-		
-		Bomb b;
-		while(bs.hasNext()) {
-			b = bs.next();
-			if(b.isRemoved())  {
-				bs.remove();
-				Game.addBombRate(1);
+		if (_index == 1) {
+			Iterator<Bomb> bs1 = _bombs1.iterator();
+			Bomb b;
+			while(bs1.hasNext()) {
+				b = bs1.next();
+				if(b.isRemoved())  {
+					bs1.remove();
+					Game.addBombRate1(1);
+				}
 			}
 		}
-		
+		if (_index == 2) {
+			Iterator<Bomb> bs2 = _bombs2.iterator();
+			Bomb b;
+			while(bs2.hasNext()) {
+				b = bs2.next();
+				if(b.isRemoved())  {
+					bs2.remove();
+					Game.addBombRate2(1);
+				}
+			}
+		}
 	}
 	
 	/*
@@ -138,7 +160,7 @@ public class Player extends Mob {
 	@Override
 	public void kill() {
 		if(!_alive) return;
-		
+
 		_alive = false;
 		
 		_board.addLives(-1);
@@ -151,12 +173,24 @@ public class Player extends Mob {
 	protected void afterKill() {
 		if(_timeAfter > 0) --_timeAfter;
 		else {
-			if(_bombs.size() == 0) {
-				
-				if(_board.getLives() == 0)
-					_board.endGame();
-				else
-					_board.restartLevel();
+			if (_index == 1) {
+				if(_bombs1.size() == 0) {
+
+					if(_board.getLives() == 0)
+						_board.endGame();
+					else
+						_board.restartLevel();
+				}
+			}
+
+			if (_index == 2) {
+				if(_bombs2.size() == 0) {
+
+					if(_board.getLives() == 0)
+						_board.endGame();
+					else
+						_board.restartLevel();
+				}
 			}
 		}
 	}
@@ -178,19 +212,20 @@ public class Player extends Mob {
 			if(_input.right1) xa++;
 
 			if(xa != 0 || ya != 0)  {
-				move(xa * Game.getPlayerSpeed(), ya * Game.getPlayerSpeed());
+				move(xa * Game.getPlayerSpeed1(), ya * Game.getPlayerSpeed1());
 				_moving = true;
 			} else {
 				_moving = false;
 			}
-		} else if (_index == 2) {
+		}
+		if (_index == 2) {
 			if(_input.up2) yb--;
 			if(_input.down2) yb++;
 			if(_input.left2) xb--;
 			if(_input.right2) xb++;
 
 			if(xb != 0 || yb != 0)  {
-				move(xb * Game.getPlayerSpeed(), yb * Game.getPlayerSpeed());
+				move(xb * Game.getPlayerSpeed2(), yb * Game.getPlayerSpeed2());
 				_moving = true;
 			} else {
 				_moving = false;
@@ -253,8 +288,12 @@ public class Player extends Mob {
 		if(p.isRemoved()) return;
 		
 		_powerups.add(p);
-		
-		p.setValues();
+
+		if (_index == 1) {
+			p.setValues1();
+		} else if (_index == 2) {
+			p.setValues2();
+		}
 	}
 	
 	public void clearUsedPowerups() {

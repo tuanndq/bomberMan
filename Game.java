@@ -42,11 +42,13 @@ public class Game extends Canvas {
 	
 	
 	//can be modified with bonus
-	protected static int bombRate = BOMBRATE;
-	protected static int bombRadius = BOMBRADIUS;
-	protected static double playerSpeed = PLAYERSPEED;
-	
-	
+	protected static int bombRate1 = BOMBRATE;
+	protected static int bombRate2 = BOMBRATE;
+	protected static int bombRadius1 = BOMBRADIUS;
+	protected static int bombRadius2 = BOMBRADIUS;
+	protected static double playerSpeed1 = PLAYERSPEED;
+	protected static double playerSpeed2 = PLAYERSPEED;
+
 	//Time in the level screen in seconds
 	protected int _screenDelay = SCREENDELAY;
 	
@@ -167,34 +169,62 @@ public class Game extends Canvas {
 			}
 		}
 	}
+
+	public void reset() {
+
+	}
 	
 	/*
 	|--------------------------------------------------------------------------
 	| Getters & Setters
 	|--------------------------------------------------------------------------
 	 */
-	public static double getPlayerSpeed() {
-		return playerSpeed;
+	public static double getPlayerSpeed1() {
+		return playerSpeed1;
+	}
+
+	public static double getPlayerSpeed2() {
+		return playerSpeed2;
 	}
 	
-	public static int getBombRate() {
-		return bombRate;
+	public static int getBombRate1() {
+		return bombRate1;
+	}
+
+	public static int getBombRate2() {
+		return bombRate2;
 	}
 	
-	public static int getBombRadius() {
-		return bombRadius;
+	public static int getBombRadius1() {
+		return bombRadius1;
+	}
+
+	public static int getBombRadius2() {
+		return bombRadius2;
 	}
 	
-	public static void addPlayerSpeed(double i) {
-		playerSpeed += i;
+	public static void addPlayerSpeed1(double i) {
+		playerSpeed1 += i;
+	}
+
+	public static void addPlayerSpeed2(double i) {
+		playerSpeed2 += i;
 	}
 	
-	public static void addBombRadius(int i) {
-		bombRadius += i;
+	public static void addBombRadius1(int i) {
+		bombRadius1 += i;
+	}
+
+	public static void addBombRadius2(int i) {
+		bombRadius2 += i;
 	}
 	
-	public static void addBombRate(int i) {
-		bombRate += 1;
+	public static void addBombRate1(int i) {
+		bombRate1 += i;
+	}
+
+	public static void addBombRate2(int i) {
+		bombRate2 += i;
 	}
 	
 	//screen delay

@@ -30,7 +30,8 @@ public class Board implements IRender {
 	
 	public Entity[] _entities;
 	public List<Mob> _mobs = new ArrayList<Mob>();
-	protected List<Bomb> _bombs = new ArrayList<Bomb>();
+	protected List<Bomb> _bombs1 = new ArrayList<Bomb>();
+	protected List<Bomb> _bombs2 = new ArrayList<Bomb>();
 	private List<Message> _messages = new ArrayList<Message>();
 	
 	private int _screenToShow = -1; //1:endgame, 2:changelevel, 3:paused
@@ -102,10 +103,14 @@ public class Board implements IRender {
 		_lives = Game.LIVES;
 		Player._powerups.clear();
 		
-		_game.playerSpeed = 1.0;
-		_game.bombRadius = 1;
-		_game.bombRate = 1;
-		
+		_game.playerSpeed1 = 1.0;
+		_game.playerSpeed2 = 1.0;
+
+		_game.bombRadius1 = 1;
+		_game.bombRadius2 = 1;
+
+		_game.bombRate1 = 1;
+		_game.bombRate2 = 1;
 	}
 
 	public void restartLevel() {
@@ -122,7 +127,8 @@ public class Board implements IRender {
 		_game.resetScreenDelay();
 		_game.pause();
 		_mobs.clear();
-		_bombs.clear();
+		_bombs1.clear();
+		_bombs2.clear();
 		_messages.clear();
 		
 		try {
@@ -238,15 +244,25 @@ public class Board implements IRender {
 		return res;
 	}
 	
-	public List<Bomb> getBombs() {
-		return _bombs;
+	public List<Bomb> getBombs1() {
+		return _bombs1;
+	}
+
+	public List<Bomb> getBombs2() {
+		return _bombs2;
 	}
 	
 	public Bomb getBombAt(double x, double y) {
-		Iterator<Bomb> bs = _bombs.iterator();
+		Iterator<Bomb> bs1 = _bombs1.iterator();
+		Iterator<Bomb> bs2 = _bombs2.iterator();
 		Bomb b;
-		while(bs.hasNext()) {
-			b = bs.next();
+		while(bs1.hasNext()) {
+			b = bs1.next();
+			if(b.getX() == (int)x && b.getY() == (int)y)
+				return b;
+		}
+		while(bs2.hasNext()) {
+			b = bs2.next();
 			if(b.getX() == (int)x && b.getY() == (int)y)
 				return b;
 		}
@@ -302,16 +318,24 @@ public class Board implements IRender {
 	}
 	
 	public Explosion getExplosionAt(int x, int y) {
-		Iterator<Bomb> bs = _bombs.iterator();
+		Iterator<Bomb> bs1 = _bombs1.iterator();
+		Iterator<Bomb> bs2 = _bombs2.iterator();
 		Bomb b;
-		while(bs.hasNext()) {
-			b = bs.next();
+		while(bs1.hasNext()) {
+			b = bs1.next();
 			
 			Explosion e = b.explosionAt(x, y);
 			if(e != null) {
 				return e;
 			}
-				
+		}
+		while(bs2.hasNext()) {
+			b = bs2.next();
+
+			Explosion e = b.explosionAt(x, y);
+			if(e != null) {
+				return e;
+			}
 		}
 		
 		return null;
@@ -334,8 +358,12 @@ public class Board implements IRender {
 		_mobs.add(e);
 	}
 	
-	public void addBomb(Bomb e) {
-		_bombs.add(e);
+	public void addBomb1(Bomb e) {
+		_bombs1.add(e);
+	}
+
+	public void addBomb2(Bomb e) {
+		_bombs2.add(e);
 	}
 	
 	public void addMessage(Message e) {
@@ -361,10 +389,13 @@ public class Board implements IRender {
 	}
 	
 	protected void renderBombs(Screen screen) {
-		Iterator<Bomb> itr = _bombs.iterator();
-		
-		while(itr.hasNext())
-			itr.next().render(screen);
+		Iterator<Bomb> itr1 = _bombs1.iterator();
+		Iterator<Bomb> itr2 = _bombs2.iterator();
+
+		while(itr1.hasNext())
+			itr1.next().render(screen);
+		while(itr2.hasNext())
+			itr2.next().render(screen);
 	}
 	
 	public void renderMessages(Graphics g) {
@@ -400,10 +431,15 @@ public class Board implements IRender {
 	
 	protected void updateBombs() {
 		if( _game.isPaused() ) return;
-		Iterator<Bomb> itr = _bombs.iterator();
+		Iterator<Bomb> itr1 = _bombs1.iterator();
 		
-		while(itr.hasNext())
-			itr.next().update();
+		while(itr1.hasNext())
+			itr1.next().update();
+
+		Iterator<Bomb> itr2 = _bombs2.iterator();
+
+		while(itr2.hasNext())
+			itr2.next().update();
 	}
 	
 	protected void updateMessages() {
